@@ -29,3 +29,11 @@ docker ps
 ```
 
 * Connect to the instance via the default Redis port(6379)
+
+### Redis cluster on Amazon ElastiCache
+
+* TODO
+
+### Redis cluster with Docker Cloud
+
+* TODO

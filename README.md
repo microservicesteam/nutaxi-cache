@@ -18,7 +18,7 @@ Redis is an open source key-value store that functions as a data structure serve
 * Start Redis instance
 
 ```
- docker run --name nutaxi-redis -d redis
+docker run --name nutaxi-redis -p 6379:6379  -d redis
 ```
 
 * Check that the instance has been started
@@ -26,7 +26,6 @@ Redis is an open source key-value store that functions as a data structure serve
 ```
 docker ps
 
-docker run --name nutaxi-redis -p 6379:6379  -d redis
 ```
 
 * Connect to the instance via the default Redis port(6379)

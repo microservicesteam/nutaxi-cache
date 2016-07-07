@@ -17,7 +17,7 @@ import com.google.common.base.Throwables;
 
 public class RedisDockerService {
 
-	private static final String IMAGE_NAME = "redis:latest";
+	private static final String IMAGE_NAME = "redis";
 	private static final int DEFAULT_PORT = 6379;
 	private static final Random RANDOM = new Random();
 	private static final int SEED = 1000;

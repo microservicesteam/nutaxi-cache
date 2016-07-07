@@ -36,7 +36,7 @@ public class RedisDockerService {
 	}
 
 	private String createContainer(String name) {
-		Validate.isTrue(isAvailablePort(DEFAULT_PORT), "Port %s is not available", DEFAULT_PORT);
+		Validate.isTrue(isAvailablePort(DEFAULT_PORT), "Port " + DEFAULT_PORT + " is not available");
 
 		ExposedPort tcp6379 = tcp(DEFAULT_PORT);
 		Ports portBindings = new Ports(tcp6379, bindPort(DEFAULT_PORT));

@@ -1,4 +1,4 @@
-package com.microservicesteam;
+package com.microservicesteam.nutaxi.cache;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

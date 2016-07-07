@@ -24,15 +24,22 @@ public class RedisDockerService {
 
 	private final DockerClient dockerClient;
 
-	private final String containerId;
+	private String containerId;
 
-	public RedisDockerService(String containerName) {
+	public RedisDockerService() {
 		dockerClient = DockerClientBuilder.getInstance().build();
-		containerId = createAndStartContainer(containerName);
 	}
 
-	public String createAndStartContainer(String containerName) {
-		return startContainer(createContainer(containerName + "-" + RANDOM.nextInt(SEED)));
+	public void createAndStartContainer(String containerName) {
+		containerId = startContainer(createContainer(containerName + "-" + RANDOM.nextInt(SEED)));
+	}
+
+	public void close() {
+		Validate.notNull(dockerClient, "Docker client must be present");
+		Validate.notNull(containerId, "Container ID must be present");
+
+		stopContainer();
+		closeClient();
 	}
 
 	private String createContainer(String name) {
@@ -54,18 +61,17 @@ public class RedisDockerService {
 		return id;
 	}
 
-	public void close() {
-		Validate.notNull(dockerClient, "Docker client must be present");
-		Validate.notNull(containerId, "Container ID must be present");
-
-		dockerClient.stopContainerCmd(containerId)
-				.exec();
-
+	private void closeClient() {
 		try {
 			dockerClient.close();
 		} catch (IOException exception) {
 			throw Throwables.propagate(exception);
 		}
+	}
+
+	private void stopContainer() {
+		dockerClient.stopContainerCmd(containerId)
+				.exec();
 	}
 
 	private static boolean isAvailablePort(int port) {

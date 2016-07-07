@@ -22,7 +22,8 @@ public class NutaxiRedisClientTests {
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		redisDockerService = new RedisDockerService("nutaxi-test-redis");
+		redisDockerService = new RedisDockerService();
+		redisDockerService.createAndStartContainer("nutaxi-test-redis");
 	}
 
 	@AfterClass

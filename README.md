@@ -32,7 +32,25 @@ docker ps
 
 ### Redis cluster on Amazon ElastiCache
 
-* TODO
+*Prerequisites*
+
+* AWS account
+
+*Steps*
+
+* Login to Amazon account
+* Go to ElastiCache home page (https://console.aws.amazon.com/elasticache/home)
+* Click on Launch Cache Cluster button
+* Select Redis as an engine
+* Enter the necessary settings on Specify Cluster Details page
+* Select the default VPC in Cache Subnet Group
+* Select the appropriate VPC Security groups (this will be needed later)
+* Review the settings and click on Launch Replication Group button
+* The started cluster can be viewed under Cache Clusters window
+* Expand cluster details to see the endpoint where you can connect to
+* Access to the cluster can be managed by the security group, the correct port (6379 by default) needs to opened (Service / EC2 / Security groups / Select security group / Inbound tab at the bottom / Edit button)
+
+Based on ElastiCache [Getting started guide](http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/GettingStarted.html)
 
 ### Redis cluster with Docker Cloud
 

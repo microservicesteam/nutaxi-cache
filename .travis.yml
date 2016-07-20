@@ -3,8 +3,10 @@ language: java
 jdk:
   oraclejdk8
 script:
-  - mvn clean install
+  - gradle clean build
+before_install:
+  - pip install --user codecov
 notifications:
-  email: false
+  email: true
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - codecov

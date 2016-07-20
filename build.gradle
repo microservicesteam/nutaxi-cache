@@ -14,7 +14,6 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 apply plugin: 'jacoco'
-apply plugin: 'org.standardout.versioneye'
 
 jar {
 	baseName = 'nutaxi-cache'
@@ -51,13 +50,6 @@ jacocoTestReport {
 
 check.dependsOn jacocoTestReport
 
-buildscript {
-  repositories {
-    maven {
-      url 'https://plugins.gradle.org/m2/'
-    }
-  }
-  dependencies {
-    classpath 'org.standardout:gradle-versioneye-plugin:1.4.0'
-  }
+plugins {
+    id "org.standardout.versioneye" version "1.4.0"
 }

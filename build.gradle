@@ -4,8 +4,10 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
+		jcenter()		
 	}
 	dependencies {
+		classpath("org.standardout:gradle-versioneye-plugin:1.4.0")		
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
 }
@@ -14,6 +16,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 apply plugin: 'jacoco'
+apply plugin: 'org.standardout.versioneye'
 
 jar {
 	baseName = 'nutaxi-cache'

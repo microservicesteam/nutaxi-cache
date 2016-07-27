@@ -4,10 +4,12 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
-		jcenter()		
+		jcenter()
+		maven { url "https://plugins.gradle.org/m2/" }		
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("io.franzbecker:gradle-lombok:1.6")
 	}
 }
 
@@ -15,13 +17,16 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 apply plugin: 'jacoco'
+apply plugin: 'io.franzbecker.gradle-lombok'
 
 jar {
 	baseName = 'nutaxi-cache'
 	version = '0.0.1-SNAPSHOT'
 }
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+compileJava.options.encoding = 'UTF-8'
 
 repositories {
 	mavenCentral()
@@ -31,6 +36,8 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
 	compile('org.springframework.boot:spring-boot-starter-redis')
+	compile('org.apache.commons:commons-lang3:3.4')
+	compile('org.projectlombok:lombok:1.16.10')	
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 

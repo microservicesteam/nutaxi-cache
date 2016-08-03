@@ -212,3 +212,4 @@ gradle-app.setting
 ### Other ###
 
 .mvn
+/gradle.properties

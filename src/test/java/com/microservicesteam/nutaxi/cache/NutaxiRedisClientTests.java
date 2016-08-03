@@ -19,8 +19,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microservicesteam.nutaxi.cache.model.Route;
 
 import redis.embedded.RedisServer;
 
@@ -28,6 +32,8 @@ import redis.embedded.RedisServer;
 @SpringApplicationConfiguration(classes = NutaxiRedisClient.class)
 @WebAppConfiguration
 public class NutaxiRedisClientTests {
+
+	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
 	@Autowired
 	private ApplicationContext applicationContext;
@@ -62,15 +68,17 @@ public class NutaxiRedisClientTests {
 
 	@Test
 	public void routeCanBeRetrievedAfterSave() throws Exception {
-		this.mockMvc.perform(post("/route")
+		MvcResult result = this.mockMvc.perform(post("/route")
 				.contentType(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
-				.content("{\"id\":\"1\",\"origin\":\"WhESYuyGbIfRghNlhgGmjQslS\",\"destination\":\"VTiCuGymAmdrhjapLtcKcXApf\"}"))
+				.content("{\"origin\":\"WhESYuyGbIfRghNlhgGmjQslS\",\"destination\":\"VTiCuGymAmdrhjapLtcKcXApf\"}"))
 				.andDo(print())
 				.andExpect(status().isCreated())
-				.andExpect(jsonPath("$.id").value("1"));
+				.andExpect(jsonPath("$.id").value("1"))
+				.andReturn();
+		Route savedRoute = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), Route.class);
 
-		this.mockMvc.perform(get("/route/1"))
+		this.mockMvc.perform(get("/route/" + savedRoute.getId()))
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").value("1"));

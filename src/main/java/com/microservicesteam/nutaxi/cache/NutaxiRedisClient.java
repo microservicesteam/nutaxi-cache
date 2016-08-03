@@ -49,6 +49,7 @@ public class NutaxiRedisClient {
 		ResponseEntity<?> add(@RequestBody Route input) {
 
 			Validate.notNull(input);
+			Validate.isTrue(input.getId() == null);
 			Validate.notNull(input.getOrigin());
 			Validate.notNull(input.getDestination());
 

@@ -35,11 +35,14 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
+	compile("org.springframework.boot:spring-boot-starter-web")
 	compile('org.springframework.boot:spring-boot-starter-redis')
 	compile('org.apache.commons:commons-lang3:3.4')
 	compile('org.projectlombok:lombok:1.16.10')
+	testCompile('org.assertj:assertj-core:3.5.2')	
 	testCompile('com.orange.redis-embedded:embedded-redis:0.5')		
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('com.jayway.jsonpath:json-path')
 }
 
 

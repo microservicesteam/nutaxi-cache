@@ -9,7 +9,7 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("io.franzbecker:gradle-lombok:1.6")
+        classpath("io.franzbecker:gradle-lombok:1.7")
         classpath("org.standardout:gradle-versioneye-plugin:1.4.0")       
 	}
 }

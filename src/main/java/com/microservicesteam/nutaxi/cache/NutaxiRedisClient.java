@@ -1,22 +1,27 @@
 package com.microservicesteam.nutaxi.cache;
 
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.security.SecureRandom;
+
 import org.apache.commons.lang3.Validate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -31,8 +36,8 @@ public class NutaxiRedisClient {
 	}
 
 	@Bean
-	public RedisTemplate<String, Route> template() {
-		RedisTemplate<String, Route> template = new RedisTemplate<>();
+	public RedisTemplate<Long, Route> template() {
+		RedisTemplate<Long, Route> template = new RedisTemplate<>();
 		template.setConnectionFactory(connectionFactory());
 
 		return template;
@@ -45,6 +50,11 @@ public class NutaxiRedisClient {
 	@RestController
 	public static class Controller {
 
+		private static final SecureRandom RANDOM = new SecureRandom();
+
+		@Autowired
+		private RedisTemplate<Long, Route> routeTemplate;
+
 		@RequestMapping(path = "/route", method = POST, consumes = "application/json", produces = "application/json")
 		ResponseEntity<?> add(@RequestBody Route input) {
 
@@ -53,7 +63,8 @@ public class NutaxiRedisClient {
 			Validate.notNull(input.getOrigin());
 			Validate.notNull(input.getDestination());
 
-			input.setId("1");
+			input.setId(RANDOM.nextLong());
+			routeTemplate.opsForValue().set(input.getId(), input);
 
 			HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.setLocation(ServletUriComponentsBuilder
@@ -65,12 +76,19 @@ public class NutaxiRedisClient {
 		}
 
 		@RequestMapping(path = "/route/{id}", method = GET)
-		public Route route(@PathVariable(value = "id") String id) {
-			return Route.builder()
-					.id(id)
-					.origin(randomAlphabetic(25))
-					.destination(randomAlphabetic(25))
-					.build();
+		public Route route(@PathVariable(value = "id") Long id) {
+			Validate.notNull(id);
+			ValueOperations<Long, Route> operations = routeTemplate.opsForValue();
+
+			if (!routeTemplate.hasKey(id)) {
+				throw new RouteNotFoundException();
+			}
+
+			return operations.get(id);
+		}
+
+		@ResponseStatus(value = NOT_FOUND, reason = "No such route")
+		public class RouteNotFoundException extends RuntimeException {
 		}
 
 	}

@@ -19,7 +19,7 @@ import lombok.ToString;
 public class Route implements Serializable {
 
 	@Getter
-	private String id;
+	private Long id;
 
 	@Getter
 	private String origin;

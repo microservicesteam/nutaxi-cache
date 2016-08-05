@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Random;
+import java.security.SecureRandom;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -39,7 +39,7 @@ import redis.embedded.RedisServer;
 @WebAppConfiguration
 public class NutaxiRedisClientTests {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -50,6 +50,8 @@ public class NutaxiRedisClientTests {
     private static RedisServer redisServer;
 
     private MockMvc mockMvc;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeClass
     public static void init() throws Exception {
@@ -81,7 +83,7 @@ public class NutaxiRedisClientTests {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andReturn();
-        Route savedRoute = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), Route.class);
+        Route savedRoute = objectMapper.readValue(result.getResponse().getContentAsString(), Route.class);
 
         this.mockMvc.perform(get("/route/" + savedRoute.getId()))
                 .andDo(print())
@@ -99,8 +101,7 @@ public class NutaxiRedisClientTests {
 
     @Test
     public void routeCannotBeRetrievedWithoutSave() throws Exception {
-        int dummyId = new Random().nextInt();
-        this.mockMvc.perform(get("/route/" + dummyId))
+        this.mockMvc.perform(get("/route/" + RANDOM.nextInt()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

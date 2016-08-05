@@ -22,7 +22,7 @@ apply plugin: 'io.franzbecker.gradle-lombok'
 apply plugin: 'org.standardout.versioneye'
 apply plugin: 'checkstyle'
 apply plugin: 'pmd'
-
+apply plugin: 'findbugs'
 
 jar {
 	baseName = 'nutaxi-cache'
@@ -82,6 +82,8 @@ checkstyle {
 pmd {
 	toolVersion = "5.5.1"
 }
+
+
 
 check.dependsOn jacocoTestReport
 

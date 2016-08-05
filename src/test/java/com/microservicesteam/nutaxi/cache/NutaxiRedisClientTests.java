@@ -35,62 +35,62 @@ import redis.embedded.RedisServer;
 @WebAppConfiguration
 public class NutaxiRedisClientTests {
 
-	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-	@Autowired
-	private ApplicationContext applicationContext;
+    @Autowired
+    private ApplicationContext applicationContext;
 
-	@Autowired
-	private WebApplicationContext webApplicationContext;
+    @Autowired
+    private WebApplicationContext webApplicationContext;
 
-	private static RedisServer redisServer;
+    private static RedisServer redisServer;
 
-	private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-	@BeforeClass
-	public static void init() throws Exception {
-		redisServer = new RedisServer(6379);
-		redisServer.start();
-	}
+    @BeforeClass
+    public static void init() throws Exception {
+        redisServer = new RedisServer(6379);
+        redisServer.start();
+    }
 
-	@Before
-	public void setUp() {
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-	}
+    @Before
+    public void setUp() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
 
-	@AfterClass
-	public static void tearDown() throws Exception {
-		redisServer.stop();
-	}
+    @AfterClass
+    public static void tearDown() throws Exception {
+        redisServer.stop();
+    }
 
-	@Test
-	public void contextLoads() {
-		assertThat(applicationContext).isNotNull();
-	}
+    @Test
+    public void contextLoads() {
+        assertThat(applicationContext).isNotNull();
+    }
 
-	@Test
-	public void routeCanBeRetrievedAfterSave() throws Exception {
-		MvcResult result = this.mockMvc.perform(post("/route")
-				.contentType(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.content("{\"origin\":\"WhESYuyGbIfRghNlhgGmjQslS\",\"destination\":\"VTiCuGymAmdrhjapLtcKcXApf\"}"))
-				.andDo(print())
-				.andExpect(status().isCreated())
-				.andReturn();
-		Route savedRoute = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), Route.class);
+    @Test
+    public void routeCanBeRetrievedAfterSave() throws Exception {
+        MvcResult result = this.mockMvc.perform(post("/route")
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .content("{\"origin\":\"WhESYuyGbIfRghNlhgGmjQslS\",\"destination\":\"VTiCuGymAmdrhjapLtcKcXApf\"}"))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn();
+        Route savedRoute = OBJECT_MAPPER.readValue(result.getResponse().getContentAsString(), Route.class);
 
-		this.mockMvc.perform(get("/route/" + savedRoute.getId()))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.id").value(savedRoute.getId()));
-	}
+        this.mockMvc.perform(get("/route/" + savedRoute.getId()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(savedRoute.getId()));
+    }
 
-	@Test
-	public void routeCannotBeRetrievedWithoutSave() throws Exception {
-		int dummyId = new Random().nextInt();
-		this.mockMvc.perform(get("/route/" + dummyId))
-				.andDo(print())
-				.andExpect(status().isNotFound());
-	}
+    @Test
+    public void routeCannotBeRetrievedWithoutSave() throws Exception {
+        int dummyId = new Random().nextInt();
+        this.mockMvc.perform(get("/route/" + dummyId))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
 
 }

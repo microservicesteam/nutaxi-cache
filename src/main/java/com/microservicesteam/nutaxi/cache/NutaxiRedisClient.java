@@ -12,21 +12,21 @@ import com.microservicesteam.nutaxi.cache.model.Route;
 @SpringBootApplication
 public class NutaxiRedisClient {
 
-	@Bean
-	public RedisConnectionFactory connectionFactory() {
-		return new JedisConnectionFactory();
-	}
+    @Bean
+    public RedisConnectionFactory connectionFactory() {
+        return new JedisConnectionFactory();
+    }
 
-	@Bean
-	public RedisTemplate<Long, Route> template() {
-		RedisTemplate<Long, Route> template = new RedisTemplate<>();
-		template.setConnectionFactory(connectionFactory());
+    @Bean
+    public RedisTemplate<Long, Route> template() {
+        RedisTemplate<Long, Route> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory());
 
-		return template;
-	}
+        return template;
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(NutaxiRedisClient.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(NutaxiRedisClient.class, args);
+    }
 
 }

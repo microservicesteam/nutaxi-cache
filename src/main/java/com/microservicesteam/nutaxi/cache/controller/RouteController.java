@@ -25,60 +25,60 @@ import com.microservicesteam.nutaxi.cache.model.Route;
 @RestController
 public class RouteController {
 
-	private static final SecureRandom RANDOM = new SecureRandom();
+    private static final SecureRandom RANDOM = new SecureRandom();
 
-	@Autowired
-	private RedisTemplate<Long, Route> routeTemplate;
+    @Autowired
+    private RedisTemplate<Long, Route> routeTemplate;
 
-	@RequestMapping(path = "/route", method = POST, consumes = "application/json", produces = "application/json")
-	ResponseEntity<?> add(@RequestBody Route input) {
-		return new ResponseEntity<>(cacheRoute(validate(input)), getHttpResponseHeaders(input), CREATED);
-	}
+    @RequestMapping(path = "/route", method = POST, consumes = "application/json", produces = "application/json")
+    ResponseEntity<?> add(@RequestBody Route input) {
+        return new ResponseEntity<>(cacheRoute(validate(input)), getHttpResponseHeaders(input), CREATED);
+    }
 
-	private static Route validate(Route input) {
-		Validate.notNull(input);
-		Validate.isTrue(input.getId() == null);
-		Validate.notNull(input.getOrigin());
-		Validate.notNull(input.getDestination());
+    private static Route validate(Route input) {
+        Validate.notNull(input);
+        Validate.isTrue(input.getId() == null);
+        Validate.notNull(input.getOrigin());
+        Validate.notNull(input.getDestination());
 
-		return input;
-	}
+        return input;
+    }
 
-	private Route cacheRoute(Route input) {
-		Route route = Route.builder()
-				.id(RANDOM.nextLong())
-				.origin(input.getOrigin())
-				.destination(input.getDestination())
-				.build();
+    private Route cacheRoute(Route input) {
+        Route route = Route.builder()
+                .id(RANDOM.nextLong())
+                .origin(input.getOrigin())
+                .destination(input.getDestination())
+                .build();
 
-		routeTemplate.opsForValue().set(route.getId(), route);
+        routeTemplate.opsForValue().set(route.getId(), route);
 
-		return route;
-	}
+        return route;
+    }
 
-	private static HttpHeaders getHttpResponseHeaders(Route input) {
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setLocation(ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(input.getId())
-				.toUri());
-		return httpHeaders;
-	}
+    private static HttpHeaders getHttpResponseHeaders(Route input) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(input.getId())
+                .toUri());
+        return httpHeaders;
+    }
 
-	@RequestMapping(path = "/route/{id}", method = GET)
-	public Route route(@PathVariable(value = "id") Long id) {
-		Validate.notNull(id);
-		ValueOperations<Long, Route> operations = routeTemplate.opsForValue();
+    @RequestMapping(path = "/route/{id}", method = GET)
+    public Route route(@PathVariable(value = "id") Long id) {
+        Validate.notNull(id);
+        ValueOperations<Long, Route> operations = routeTemplate.opsForValue();
 
-		if (!routeTemplate.hasKey(id)) {
-			throw new RouteNotFoundException();
-		}
+        if (!routeTemplate.hasKey(id)) {
+            throw new RouteNotFoundException();
+        }
 
-		return operations.get(id);
-	}
+        return operations.get(id);
+    }
 
-	@ResponseStatus(value = NOT_FOUND, reason = "No such route")
-	public class RouteNotFoundException extends RuntimeException {
-	}
+    @ResponseStatus(value = NOT_FOUND, reason = "No such route")
+    public class RouteNotFoundException extends RuntimeException {
+    }
 }

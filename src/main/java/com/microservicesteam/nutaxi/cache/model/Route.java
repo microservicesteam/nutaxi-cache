@@ -18,13 +18,13 @@ import lombok.ToString;
 @NoArgsConstructor
 public class Route implements Serializable {
 
-	@Getter
-	private Long id;
+    @Getter
+    private Long id;
 
-	@Getter
-	private String origin;
+    @Getter
+    private String origin;
 
-	@Getter
-	private String destination;
+    @Getter
+    private String destination;
 
 }

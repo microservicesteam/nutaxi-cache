@@ -20,6 +20,7 @@ apply plugin: 'spring-boot'
 apply plugin: 'jacoco'
 apply plugin: 'io.franzbecker.gradle-lombok'
 apply plugin: 'org.standardout.versioneye'
+apply plugin: 'checkstyle'
 
 
 jar {

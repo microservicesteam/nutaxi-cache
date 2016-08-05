@@ -44,7 +44,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-redis')
 	compile('org.apache.commons:commons-lang3:3.4')
 	compile('org.projectlombok:lombok:1.16.10')
-	compile('com.google.guava:guava:11.0.2')
+	compile('com.google.guava:guava:19.0')
 	
 	testCompile('org.assertj:assertj-core:3.5.2')	
 	testCompile('com.orange.redis-embedded:embedded-redis:0.6')		

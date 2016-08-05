@@ -1,5 +1,6 @@
 package com.microservicesteam.nutaxi.cache;
 
+import static com.google.common.base.Throwables.propagate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -8,6 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Random;
 
 import org.junit.AfterClass;
@@ -73,7 +77,7 @@ public class NutaxiRedisClientTests {
         MvcResult result = this.mockMvc.perform(post("/route")
                 .contentType(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .content("{\"origin\":\"WhESYuyGbIfRghNlhgGmjQslS\",\"destination\":\"VTiCuGymAmdrhjapLtcKcXApf\"}"))
+                .content(getSampleContent()))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -83,6 +87,14 @@ public class NutaxiRedisClientTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(savedRoute.getId()));
+    }
+
+    private static String getSampleContent() {
+        try {
+            return new String(Files.readAllBytes(Paths.get("src/test/resources/examples/sample.json")), "UTF-8");
+        } catch (IOException exception) {
+            throw propagate(exception);
+        }
     }
 
     @Test

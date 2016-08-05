@@ -24,9 +24,12 @@ apply plugin: 'checkstyle'
 apply plugin: 'pmd'
 apply plugin: 'findbugs'
 
+group = 'com.microservicesteam'
+version = '0.0.1-SNAPSHOT'
+
 jar {
 	baseName = 'nutaxi-cache'
-	version = '0.0.1-SNAPSHOT'
+	version = "${version}"
 }
 
 sourceCompatibility = 1.8

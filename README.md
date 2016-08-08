@@ -56,4 +56,10 @@ Based on ElastiCache [Getting started guide](http://docs.aws.amazon.com/AmazonEl
 
 ### Redis cluster with Docker Cloud
 
-* TODO
+* Link your cloud provider
+* Create a node
+* Start a service
+* Select the official `redis` image for this service
+* Don't forget to expose port `6379`
+* Start the container
+* Copy the URL to the service

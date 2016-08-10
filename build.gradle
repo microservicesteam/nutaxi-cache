@@ -86,6 +86,9 @@ pmd {
 	toolVersion = "5.5.1"
 }
 
+findbugs {
+	toolVersion = "3.0.1"
+}
 
 
 check.dependsOn jacocoTestReport

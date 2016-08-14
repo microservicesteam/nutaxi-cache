@@ -81,7 +81,7 @@ jacocoTestReport {
 }
 
 task checkstyleConfigDownload(type: de.undercouch.gradle.tasks.download.Download) {
-    src 'https://raw.githubusercontent.com/microservicesteam/nutaxi-cache/master/config/checkstyle/checkstyle.xml'
+    src 'https://raw.githubusercontent.com/microservicesteam/nutaxi-dev/master/config/checkstyle/checkstyle.xml'
     dest buildDir
 }
 

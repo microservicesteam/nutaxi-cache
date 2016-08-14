@@ -10,7 +10,8 @@ buildscript {
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("io.franzbecker:gradle-lombok:1.7")
-        classpath("org.standardout:gradle-versioneye-plugin:1.4.0")       
+        classpath("org.standardout:gradle-versioneye-plugin:1.4.0")
+        classpath("de.undercouch:gradle-download-task:3.1.1")               
 	}
 }
 
@@ -23,6 +24,7 @@ apply plugin: 'org.standardout.versioneye'
 apply plugin: 'checkstyle'
 apply plugin: 'pmd'
 apply plugin: 'findbugs'
+apply plugin: 'de.undercouch.download'
 
 group = 'com.microservicesteam'
 version = '0.0.1-SNAPSHOT'
@@ -78,8 +80,14 @@ jacocoTestReport {
     }
 }
 
+task checkstyleConfigDownload(type: de.undercouch.gradle.tasks.download.Download) {
+    src 'https://raw.githubusercontent.com/microservicesteam/nutaxi-cache/master/config/checkstyle/checkstyle.xml'
+    dest buildDir
+}
+
 checkstyle {
     toolVersion = "7.1"
+    configFile = new File(buildDir, "checkstyle.xml")
 }
 
 pmd {
@@ -90,6 +98,6 @@ findbugs {
 	toolVersion = "3.0.1"
 }
 
-
 check.dependsOn jacocoTestReport
-
+checkstyleMain.dependsOn checkstyleConfigDownload
+checkstyleTest.dependsOn checkstyleConfigDownload

@@ -10,10 +10,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.security.SecureRandom;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -92,8 +92,9 @@ public class NutaxiRedisClientTests {
     }
 
     private static String getSampleContent() {
+        InputStream is = NutaxiRedisClientTests.class.getResourceAsStream("/examples/sample.json");
         try {
-            return new String(Files.readAllBytes(Paths.get("src/test/resources/examples/sample.json")), "UTF-8");
+            return IOUtils.toString(is);
         } catch (IOException exception) {
             throw propagate(exception);
         }

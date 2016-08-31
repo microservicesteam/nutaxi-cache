@@ -48,6 +48,8 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-web")
 	compile('org.springframework.boot:spring-boot-starter-redis')
 	compile('org.apache.commons:commons-lang3:3.4')
+	compile('commons-io:commons-io:2.4')
+	
 	compile('org.projectlombok:lombok:1.16.10')
 	compile('com.google.guava:guava:19.0')
 	
